@@ -1,7 +1,7 @@
 import { useState } from 'react';
-import { useQuery, useQueryClient } from '@tanstack/react-query';
-import { useNostr } from '@nostrify/react';
+import { useQueryClient } from '@tanstack/react-query';
 import { useNostrPublish } from '@/hooks/useNostrPublish';
+import { useCommunityNetFeed } from '@/hooks/useCommunityNetFeed';
 import { useSendNutzap, useUserWallet } from '../../hooks/useCashu';
 import { useCurrentUser } from '@/hooks/useCurrentUser';
 import { NoteContent } from '@/components/NoteContent';
@@ -11,7 +11,6 @@ import { Card, CardContent, CardFooter } from '@/components/ui/card';
 import type { NostrEvent } from '@nostrify/nostrify';
 
 export function MainFeed() {
-  const { nostr } = useNostr();
   const { mutateAsync: publish } = useNostrPublish();
   const { user } = useCurrentUser();
   const { data: wallet } = useUserWallet();
@@ -19,19 +18,7 @@ export function MainFeed() {
   const queryClient = useQueryClient();
   const [content, setContent] = useState('');
 
-  const { data: events = [], isLoading } = useQuery({
-    queryKey: ['main-feed'],
-    queryFn: async ({ signal }) => {
-      const res = await nostr.query(
-        [{ kinds: [1], limit: 40 }],
-        { signal: AbortSignal.any([signal, AbortSignal.timeout(5000)]) },
-      );
-      return res
-        .filter((e) => e.content.includes('#CommunityNet'))
-        .sort((a, b) => b.created_at - a.created_at);
-    },
-    refetchInterval: 30000,
-  });
+  const { data: events = [], isLoading } = useCommunityNetFeed();
 
   const handlePublish = async () => {
     if (!user) {
@@ -45,7 +32,7 @@ export function MainFeed() {
       : `${text} #CommunityNet`;
     await publish({ kind: 1, content: finalContent });
     setContent('');
-    queryClient.invalidateQueries({ queryKey: ['main-feed'] });
+    queryClient.invalidateQueries({ queryKey: ['communitynet-feed'] });
   };
 
   const handleZap = async (event: NostrEvent) => {
