@@ -1,5 +1,4 @@
 import { useState } from "react";
-import { useQueryClient } from "@tanstack/react-query";
 import {
   Dialog,
   DialogContent,
@@ -11,15 +10,6 @@ import {
 import { Textarea } from "@/components/ui/textarea";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
-import {
-  Popover,
-  PopoverTrigger,
-  PopoverContent,
-} from "@/components/ui/popover";
-import { Calendar } from "@/components/ui/calendar";
-import { Calendar as CalendarIcon } from "lucide-react";
-import { format } from "date-fns";
-import { cn } from "@/lib/utils";
 import { useNostrPublish } from "@/hooks/useNostrPublish";
 import { useCurrentUser } from "@/hooks/useCurrentUser";
 import { useToast } from "@/hooks/useToast";
@@ -43,7 +33,7 @@ export function PostFormDialog({
   const queryClient = useQueryClient();
   const [open, setOpen] = useState(false);
   const [titleInput, setTitleInput] = useState("");
-  const [dateInput, setDateInput] = useState<Date | undefined>();
+  const [dateInput, setDateInput] = useState("");
   const [description, setDescription] = useState("");
 
   const handlePublish = async () => {
@@ -61,23 +51,12 @@ export function PostFormDialog({
     } else {
       if (!text) return;
     }
-    const formattedDate = dateInput ? format(dateInput, "yyyy-MM-dd") : "";
     const body = withDetails
-      ? `Title: ${titleInput}\nDate: ${formattedDate}\nDescription: ${text}`
+      ? `Title: ${titleInput}\nDate: ${dateInput}\nDescription: ${text}`
       : text;
-
-    const category = prefix.match(/\[(.*)\]/)?.[1]?.toLowerCase();
-    const tags = [["t", "CommunityNet"]];
-    if (category) tags.push(["t", category]);
-
-    await publish({
-      kind: 1,
-      content: `${prefix} ${body} #CommunityNet`,
-      tags,
-    });
-    queryClient.invalidateQueries({ queryKey: ["communitynet-feed"] });
+    await publish({ kind: 1, content: `${prefix} ${body} #CommunityNet` });
     setTitleInput("");
-    setDateInput(undefined);
+    setDateInput("");
     setDescription("");
     setOpen(false);
   };
@@ -97,31 +76,12 @@ export function PostFormDialog({
               placeholder="Title"
               className=""
             />
-            <Popover>
-              <PopoverTrigger asChild>
-                <Button
-                  variant="outline"
-                  className={cn(
-                    "w-full justify-start text-left font-normal",
-                    !dateInput && "text-muted-foreground"
-                  )}
-                >
-                  <CalendarIcon className="mr-2 h-4 w-4" />
-                  {dateInput ? (
-                    format(dateInput, "PPP")
-                  ) : (
-                    <span>Pick a date</span>
-                  )}
-                </Button>
-              </PopoverTrigger>
-              <PopoverContent className="p-0 w-auto" align="start">
-                <Calendar
-                  mode="single"
-                  selected={dateInput}
-                  onSelect={setDateInput}
-                />
-              </PopoverContent>
-            </Popover>
+            <Input
+              value={dateInput}
+              onChange={(e) => setDateInput(e.target.value)}
+              placeholder="Date"
+              className=""
+            />
           </div>
         )}
         <Textarea

@@ -157,6 +157,7 @@ describe('NoteContent', () => {
     expect(screen.getByText('Today')).toBeInTheDocument();
     expect(screen.getByText('Bring bottles')).toBeInTheDocument();
   });
+<<<<<<< HEAD
 
   it('handles resource posts with details', () => {
     const event: NostrEvent = {
@@ -229,4 +230,6 @@ describe('NoteContent', () => {
     expect(screen.getByText('Now')).toBeInTheDocument();
     expect(screen.getByText('Please bring snacks')).toBeInTheDocument();
   });
+=======
+>>>>>>> main
 });
