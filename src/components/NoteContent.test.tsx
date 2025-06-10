@@ -205,4 +205,28 @@ describe('NoteContent', () => {
     expect(screen.getByText('Sat')).toBeInTheDocument();
     expect(screen.getByText('Park cleanup')).toBeInTheDocument();
   });
+
+  it('handles posts with label only', () => {
+    const event: NostrEvent = {
+      id: 'id4',
+      pubkey: 'pk',
+      created_at: Math.floor(Date.now() / 1000),
+      kind: 1,
+      tags: [],
+      content: '[help] Title: Need food\nDate: Now\nDescription: Please bring snacks',
+      sig: 'sig',
+    };
+
+    render(
+      <TestApp>
+        <NoteContent event={event} />
+      </TestApp>
+    );
+
+    expect(screen.queryByText('[help]')).not.toBeInTheDocument();
+    expect(screen.queryByText('#CommunityNet')).not.toBeInTheDocument();
+    expect(screen.getByText('Need food')).toBeInTheDocument();
+    expect(screen.getByText('Now')).toBeInTheDocument();
+    expect(screen.getByText('Please bring snacks')).toBeInTheDocument();
+  });
 });
