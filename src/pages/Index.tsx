@@ -257,13 +257,13 @@ export default function Index() {
               </div>
             ))}
           </div>
-          </div>
-        </div>
-
-        {/* — Main Feed — */}
-        <div className="mt-8">
-          <MainFeed />
         </div>
       </div>
-    );
+
+      {/* — Main Feed — */}
+      <div className="mt-8">
+        <MainFeed />
+      </div>
+    </div>
+  );
 }
