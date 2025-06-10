@@ -133,4 +133,28 @@ describe('NoteContent', () => {
     expect(linkText).not.toMatch(/^@npub1/); // Should not be a truncated npub
     expect(linkText).toEqual("@Swift Falcon");
   });
+
+  it('strips internal markers and labels', () => {
+    const event: NostrEvent = {
+      id: 'id',
+      pubkey: 'pk',
+      created_at: Math.floor(Date.now() / 1000),
+      kind: 1,
+      tags: [],
+      content: '[help] Title: Need water\nDate: Today\nDescription: Bring bottles #CommunityNet',
+      sig: 'sig',
+    };
+
+    render(
+      <TestApp>
+        <NoteContent event={event} />
+      </TestApp>
+    );
+
+    expect(screen.queryByText('[help]')).not.toBeInTheDocument();
+    expect(screen.queryByText('#CommunityNet')).not.toBeInTheDocument();
+    expect(screen.getByText('Need water')).toBeInTheDocument();
+    expect(screen.getByText('Today')).toBeInTheDocument();
+    expect(screen.getByText('Bring bottles')).toBeInTheDocument();
+  });
 });
