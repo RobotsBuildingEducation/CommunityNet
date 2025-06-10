@@ -76,6 +76,7 @@ export default function Index() {
               <PostFormDialog
                 prefix="[help]"
                 title="Request Help"
+                withDetails
                 trigger={
                   <button className="px-4 py-2 rounded-md bg-blue-600 text-white">
                     Request Help
@@ -113,6 +114,7 @@ export default function Index() {
               <PostFormDialog
                 prefix="[resource]"
                 title="Add Resource"
+                withDetails
                 trigger={
                   <button className="px-4 py-2 rounded-md bg-blue-600 text-white">
                     Add Resource
@@ -150,6 +152,7 @@ export default function Index() {
               <PostFormDialog
                 prefix="[action]"
                 title="Start Action"
+                withDetails
                 trigger={
                   <button className="px-4 py-2 rounded-md bg-blue-600 text-white">
                     Start Action
@@ -185,6 +188,7 @@ export default function Index() {
               <PostFormDialog
                 prefix="[knowledge]"
                 title="Share Knowledge"
+                withDetails
                 trigger={
                   <button className="px-4 py-2 rounded-md bg-blue-600 text-white">
                     Share Knowledge
@@ -227,6 +231,7 @@ export default function Index() {
                   key={i}
                   prefix="[action]"
                   title="Start Action"
+                  withDetails
                   trigger={
                     <div
                       className={`absolute w-3 h-3 rounded-full ${pt.color} cursor-pointer`}
@@ -242,6 +247,7 @@ export default function Index() {
             <PostFormDialog
               prefix="[resource]"
               title="Add Resource"
+              withDetails
               trigger={
                 <button className="px-4 py-2 rounded-md font-semibold bg-blue-600 text-white hover:bg-blue-700 transition">
                   Add Resource/Skill
@@ -251,6 +257,7 @@ export default function Index() {
             <PostFormDialog
               prefix="[help]"
               title="Request Help"
+              withDetails
               trigger={
                 <button className="px-4 py-2 rounded-md font-semibold bg-blue-600 text-white hover:bg-blue-700 transition">
                   Request Help
@@ -260,6 +267,7 @@ export default function Index() {
             <PostFormDialog
               prefix="[action]"
               title="Start Action"
+              withDetails
               trigger={
                 <button className="px-4 py-2 rounded-md font-semibold bg-white/80 text-gray-800 border border-gray-300 hover:bg-white transition">
                   Start Organizing Action
@@ -269,6 +277,7 @@ export default function Index() {
             <PostFormDialog
               prefix="[knowledge]"
               title="Share Knowledge"
+              withDetails
               trigger={
                 <button className="px-4 py-2 rounded-md font-semibold bg-white/80 text-gray-800 border border-gray-300 hover:bg-white transition">
                   Share Knowledge

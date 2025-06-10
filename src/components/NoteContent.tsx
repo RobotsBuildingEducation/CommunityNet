@@ -12,13 +12,35 @@ interface NoteContentProps {
 }
 
 /** Parses content of text note events so that URLs and hashtags are linkified. */
-export function NoteContent({
-  event, 
-  className, 
-}: NoteContentProps) {  
-  // Process the content to render mentions, links, etc.
+export function NoteContent({ event, className }: NoteContentProps) {
+  // Preprocess the event content to strip internal markers and extract metadata
+  const { title, date, text } = useMemo(() => {
+    const content = event.content
+      .replace(/#CommunityNet/g, "")
+      .replace(/\[(knowledge|help|resource|action)\]\s*/gi, "")
+      .trim();
+
+    let title: string | undefined;
+    let date: string | undefined;
+    const lines: string[] = [];
+
+    for (const line of content.split(/\n+/)) {
+      if (line.startsWith("Title:")) {
+        title = line.slice(6).trim();
+      } else if (line.startsWith("Date:")) {
+        date = line.slice(5).trim();
+      } else if (line.startsWith("Description:")) {
+        lines.push(line.slice(12).trim());
+      } else {
+        lines.push(line);
+      }
+    }
+
+    return { title, date, text: lines.join("\n").trim() };
+  }, [event]);
+
+  // Process the remaining text to render mentions, links, etc.
   const content = useMemo(() => {
-    const text = event.content;
     
     // Regex to find URLs, Nostr references, and hashtags
     const regex = /(https?:\/\/[^\s]+)|nostr:(npub1|note1|nprofile1|nevent1)([023456789acdefghjklmnpqrstuvwxyz]+)|(#\w+)/g;
@@ -105,11 +127,13 @@ export function NoteContent({
     }
     
     return parts;
-  }, [event]);
+  }, [text]);
 
   return (
     <div className={cn("whitespace-pre-wrap break-words", className)}>
-      {content.length > 0 ? content : event.content}
+      {title && <div className="font-bold text-lg mb-1">{title}</div>}
+      {date && <div className="text-sm text-gray-500 mb-2">{date}</div>}
+      {content.length > 0 ? content : text}
     </div>
   );
 }
