@@ -71,7 +71,7 @@ export function MainFeed() {
         <div>Loading...</div>
       ) : (
         events.map((ev) => (
-          <Card key={ev.id}>
+          <Card key={ev.id} className="glass-card">
             <CardContent>
               <NoteContent event={ev} />
             </CardContent>

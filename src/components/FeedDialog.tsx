@@ -18,7 +18,7 @@ export function FeedDialog({ trigger, events, title, onZap }: FeedDialogProps) {
   return (
     <Dialog open={open} onOpenChange={setOpen}>
       <DialogTrigger asChild>{trigger}</DialogTrigger>
-      <DialogContent className="max-w-xl">
+      <DialogContent className="glass-card max-w-xl">
         <DialogHeader>
           <DialogTitle>{title}</DialogTitle>
         </DialogHeader>

@@ -32,10 +32,10 @@ export default function Index() {
   );
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-blue-600 to-purple-700 text-gray-900 dark:text-gray-100">
+    <div className="min-h-screen bg-gradient-to-br from-fuchsia-500 via-purple-600 to-indigo-500 text-gray-900 dark:text-gray-100 bg-[length:200%_200%] animate-gradient">
       <div className="container mx-auto px-6 py-8">
         {/* — Header — */}
-        <div className="bg-white/90 dark:bg-gray-900/75 backdrop-blur-md rounded-2xl p-6 mb-8 shadow-lg flex flex-col md:flex-row justify-between items-center gap-4">
+        <div className="glass-card rounded-2xl p-6 mb-8 flex flex-col md:flex-row justify-between items-center gap-4">
           <div className="space-y-2">
             <h1 className="text-3xl font-bold">CommunityNet</h1>
             <p className="text-lg text-gray-700 dark:text-gray-300">
@@ -56,7 +56,7 @@ export default function Index() {
                   Show Feed
                 </button>
               </DialogTrigger>
-              <DialogContent className="max-w-xl">
+              <DialogContent className="glass-card max-w-xl">
                 <MainFeed />
               </DialogContent>
             </Dialog>
@@ -67,7 +67,7 @@ export default function Index() {
         {/* — Three-column cards — */}
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
           {/* Urgent Needs */}
-          <div className="bg-white/90 dark:bg-gray-800/75 backdrop-blur-md rounded-2xl p-6 shadow-lg border-l-4 border-red-500 hover:-translate-y-1 transform transition">
+          <div className="glass-card rounded-2xl p-6 border-l-4 border-red-500 hover:-translate-y-1 transform transition">
             <h3 className="text-xl font-semibold mb-4">
               🚨 Urgent Community Needs
             </h3>
@@ -96,7 +96,7 @@ export default function Index() {
                 events={help}
                 title="Help Requests"
                 trigger={
-                  <button className="px-4 py-2 rounded-md bg-white/80 text-gray-800 border border-gray-300">
+                  <button className="px-4 py-2 rounded-md glass-button text-gray-800">
                     Show Feed
                   </button>
                 }
@@ -105,7 +105,7 @@ export default function Index() {
           </div>
 
           {/* Available Resources */}
-          <div className="bg-white/90 dark:bg-gray-800/75 backdrop-blur-md rounded-2xl p-6 shadow-lg border-l-4 border-green-500 hover:-translate-y-1 transform transition">
+          <div className="glass-card rounded-2xl p-6 border-l-4 border-green-500 hover:-translate-y-1 transform transition">
             <h3 className="text-xl font-semibold mb-4">
               🤝 Available Resources
             </h3>
@@ -134,7 +134,7 @@ export default function Index() {
                 events={resources}
                 title="Resources"
                 trigger={
-                  <button className="px-4 py-2 rounded-md bg-white/80 text-gray-800 border border-gray-300">
+                  <button className="px-4 py-2 rounded-md glass-button text-gray-800">
                     Show Feed
                   </button>
                 }
@@ -143,7 +143,7 @@ export default function Index() {
           </div>
 
           {/* Organizing Actions */}
-          <div className="bg-white/90 dark:bg-gray-800/75 backdrop-blur-md rounded-2xl p-6 shadow-lg border-l-4 border-blue-500 hover:-translate-y-1 transform transition">
+          <div className="glass-card rounded-2xl p-6 border-l-4 border-blue-500 hover:-translate-y-1 transform transition">
             <h3 className="text-xl font-semibold mb-4">
               ⚡ Organizing Actions
             </h3>
@@ -172,7 +172,7 @@ export default function Index() {
                 events={actions}
                 title="Actions"
                 trigger={
-                  <button className="px-4 py-2 rounded-md bg-white/80 text-gray-800 border border-gray-300">
+                  <button className="px-4 py-2 rounded-md glass-button text-gray-800">
                     Show Feed
                   </button>
                 }
@@ -181,7 +181,7 @@ export default function Index() {
           </div>
 
           {/* Shared Knowledge */}
-          <div className="bg-white/90 dark:bg-gray-800/75 backdrop-blur-md rounded-2xl p-6 shadow-lg border-l-4 border-purple-500 hover:-translate-y-1 transform transition">
+          <div className="glass-card rounded-2xl p-6 border-l-4 border-purple-500 hover:-translate-y-1 transform transition">
             <h3 className="text-xl font-semibold mb-4">📚 Shared Knowledge</h3>
             <div className="space-y-3">
               {knowledge.map((ev) => (
@@ -208,7 +208,7 @@ export default function Index() {
                 events={knowledge}
                 title="Knowledge"
                 trigger={
-                  <button className="px-4 py-2 rounded-md bg-white/80 text-gray-800 border border-gray-300">
+                  <button className="px-4 py-2 rounded-md glass-button text-gray-800">
                     Show Feed
                   </button>
                 }
@@ -218,7 +218,7 @@ export default function Index() {
         </div>
 
         {/* — Map Section — */}
-        <div className="bg-white/90 dark:bg-gray-800/75 backdrop-blur-md rounded-2xl p-6 shadow-lg mb-8">
+        <div className="glass-card rounded-2xl p-6 mb-8">
           <h3 className="text-xl font-semibold mb-4">Community Activity Map</h3>
           <div className="relative rounded-xl h-64 mb-4 bg-gradient-to-br from-gray-100 to-gray-200 dark:from-gray-700 dark:to-gray-800 flex items-center justify-center text-gray-500 dark:text-gray-400">
             <div className="text-center space-y-1">
@@ -278,7 +278,7 @@ export default function Index() {
               title="Start Action"
               withDetails
               trigger={
-                <button className="px-4 py-2 rounded-md font-semibold bg-white/80 text-gray-800 border border-gray-300 hover:bg-white transition">
+                <button className="px-4 py-2 rounded-md font-semibold glass-button text-gray-800">
                   Start Organizing Action
                 </button>
               }
@@ -288,7 +288,7 @@ export default function Index() {
               title="Share Knowledge"
               withDetails
               trigger={
-                <button className="px-4 py-2 rounded-md font-semibold bg-white/80 text-gray-800 border border-gray-300 hover:bg-white transition">
+                <button className="px-4 py-2 rounded-md font-semibold glass-button text-gray-800">
                   Share Knowledge
                 </button>
               }
@@ -297,7 +297,7 @@ export default function Index() {
         </div>
 
         {/* — Network Status — */}
-        <div className="bg-white/90 dark:bg-gray-800/75 backdrop-blur-md rounded-2xl p-6 shadow-lg">
+        <div className="glass-card rounded-2xl p-6">
           <h3 className="text-xl font-semibold mb-2">Network Status</h3>
           <p className="text-gray-600 dark:text-gray-400 mb-4">
             Decentralized on NOSTR protocol • No central servers •

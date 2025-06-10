@@ -99,3 +99,18 @@
     @apply bg-background text-foreground;
   }
 }
+
+@layer utilities {
+  .glass-card {
+    @apply bg-white/20 dark:bg-gray-900/40 backdrop-blur-lg border border-white/30 dark:border-gray-700/50 shadow-xl;
+  }
+
+  .glass-button {
+    @apply bg-white/30 dark:bg-gray-800/50 backdrop-blur-md border border-white/30 dark:border-gray-700/50 hover:bg-white/40 dark:hover:bg-gray-800/60 transition;
+  }
+
+  .animate-gradient {
+    background-size: 200% 200%;
+    animation: gradient-pan 15s ease infinite;
+  }
+}

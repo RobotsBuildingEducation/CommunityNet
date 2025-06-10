@@ -49,7 +49,7 @@ export function PostFormDialog({
     if (withDetails) {
       if (!titleInput.trim() && !text) return;
     } else {
-      if (!text) return;
+      <DialogContent className="glass-card">
     }
     const body = withDetails
       ? `Title: ${titleInput}\nDate: ${dateInput}\nDescription: ${text}`
