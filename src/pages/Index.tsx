@@ -7,6 +7,7 @@ import { FeedDialog } from "@/components/FeedDialog";
 import { Dialog, DialogContent, DialogTrigger } from "@/components/ui/dialog";
 import { NoteContent } from "@/components/NoteContent";
 import { useCommunityNetFeed } from "@/hooks/useCommunityNetFeed";
+import { hasTag } from "@/lib/utils";
 
 export default function Index() {
   useSeoMeta({
@@ -17,10 +18,18 @@ export default function Index() {
 
   const { data: events = [] } = useCommunityNetFeed();
 
-  const resources = events.filter((e) => e.content.includes("[resource]"));
-  const help = events.filter((e) => e.content.includes("[help]"));
-  const actions = events.filter((e) => e.content.includes("[action]"));
-  const knowledge = events.filter((e) => e.content.includes("[knowledge]"));
+  const resources = events.filter(
+    (e) => hasTag(e, "resource") || e.content.includes("[resource]")
+  );
+  const help = events.filter(
+    (e) => hasTag(e, "help") || e.content.includes("[help]")
+  );
+  const actions = events.filter(
+    (e) => hasTag(e, "action") || e.content.includes("[action]")
+  );
+  const knowledge = events.filter(
+    (e) => hasTag(e, "knowledge") || e.content.includes("[knowledge]")
+  );
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-blue-600 to-purple-700 text-gray-900 dark:text-gray-100">
@@ -114,6 +123,7 @@ export default function Index() {
               <PostFormDialog
                 prefix="[resource]"
                 title="Add Resource"
+                withDetails
                 trigger={
                   <button className="px-4 py-2 rounded-md bg-blue-600 text-white">
                     Add Resource
@@ -151,6 +161,7 @@ export default function Index() {
               <PostFormDialog
                 prefix="[action]"
                 title="Start Action"
+                withDetails
                 trigger={
                   <button className="px-4 py-2 rounded-md bg-blue-600 text-white">
                     Start Action
@@ -229,6 +240,7 @@ export default function Index() {
                   key={i}
                   prefix="[action]"
                   title="Start Action"
+                  withDetails
                   trigger={
                     <div
                       className={`absolute w-3 h-3 rounded-full ${pt.color} cursor-pointer`}
@@ -244,6 +256,7 @@ export default function Index() {
             <PostFormDialog
               prefix="[resource]"
               title="Add Resource"
+              withDetails
               trigger={
                 <button className="px-4 py-2 rounded-md font-semibold bg-blue-600 text-white hover:bg-blue-700 transition">
                   Add Resource/Skill
@@ -263,6 +276,7 @@ export default function Index() {
             <PostFormDialog
               prefix="[action]"
               title="Start Action"
+              withDetails
               trigger={
                 <button className="px-4 py-2 rounded-md font-semibold bg-white/80 text-gray-800 border border-gray-300 hover:bg-white transition">
                   Start Organizing Action

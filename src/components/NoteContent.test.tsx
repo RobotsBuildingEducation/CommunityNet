@@ -157,4 +157,79 @@ describe('NoteContent', () => {
     expect(screen.getByText('Today')).toBeInTheDocument();
     expect(screen.getByText('Bring bottles')).toBeInTheDocument();
   });
+<<<<<<< HEAD
+
+  it('handles resource posts with details', () => {
+    const event: NostrEvent = {
+      id: 'id2',
+      pubkey: 'pk',
+      created_at: Math.floor(Date.now() / 1000),
+      kind: 1,
+      tags: [],
+      content: '[resource] Title: Water Bottles\nDate: Tomorrow\nDescription: 20 packs #CommunityNet',
+      sig: 'sig',
+    };
+
+    render(
+      <TestApp>
+        <NoteContent event={event} />
+      </TestApp>
+    );
+
+    expect(screen.queryByText('[resource]')).not.toBeInTheDocument();
+    expect(screen.queryByText('#CommunityNet')).not.toBeInTheDocument();
+    expect(screen.getByText('Water Bottles')).toBeInTheDocument();
+    expect(screen.getByText('Tomorrow')).toBeInTheDocument();
+    expect(screen.getByText('20 packs')).toBeInTheDocument();
+  });
+
+  it('handles action posts with details', () => {
+    const event: NostrEvent = {
+      id: 'id3',
+      pubkey: 'pk',
+      created_at: Math.floor(Date.now() / 1000),
+      kind: 1,
+      tags: [],
+      content: '[action] Title: Cleanup\nDate: Sat\nDescription: Park cleanup #CommunityNet',
+      sig: 'sig',
+    };
+
+    render(
+      <TestApp>
+        <NoteContent event={event} />
+      </TestApp>
+    );
+
+    expect(screen.queryByText('[action]')).not.toBeInTheDocument();
+    expect(screen.queryByText('#CommunityNet')).not.toBeInTheDocument();
+    expect(screen.getByText('Cleanup')).toBeInTheDocument();
+    expect(screen.getByText('Sat')).toBeInTheDocument();
+    expect(screen.getByText('Park cleanup')).toBeInTheDocument();
+  });
+
+  it('handles posts with label only', () => {
+    const event: NostrEvent = {
+      id: 'id4',
+      pubkey: 'pk',
+      created_at: Math.floor(Date.now() / 1000),
+      kind: 1,
+      tags: [],
+      content: '[help] Title: Need food\nDate: Now\nDescription: Please bring snacks',
+      sig: 'sig',
+    };
+
+    render(
+      <TestApp>
+        <NoteContent event={event} />
+      </TestApp>
+    );
+
+    expect(screen.queryByText('[help]')).not.toBeInTheDocument();
+    expect(screen.queryByText('#CommunityNet')).not.toBeInTheDocument();
+    expect(screen.getByText('Need food')).toBeInTheDocument();
+    expect(screen.getByText('Now')).toBeInTheDocument();
+    expect(screen.getByText('Please bring snacks')).toBeInTheDocument();
+  });
+=======
+>>>>>>> main
 });

@@ -1,11 +1,18 @@
-import { useState } from 'react';
-import { Dialog, DialogContent, DialogFooter, DialogHeader, DialogTitle, DialogTrigger } from '@/components/ui/dialog';
-import { Textarea } from '@/components/ui/textarea';
-import { Input } from '@/components/ui/input';
-import { Button } from '@/components/ui/button';
-import { useNostrPublish } from '@/hooks/useNostrPublish';
-import { useCurrentUser } from '@/hooks/useCurrentUser';
-import { useToast } from '@/hooks/useToast';
+import { useState } from "react";
+import {
+  Dialog,
+  DialogContent,
+  DialogFooter,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+} from "@/components/ui/dialog";
+import { Textarea } from "@/components/ui/textarea";
+import { Input } from "@/components/ui/input";
+import { Button } from "@/components/ui/button";
+import { useNostrPublish } from "@/hooks/useNostrPublish";
+import { useCurrentUser } from "@/hooks/useCurrentUser";
+import { useToast } from "@/hooks/useToast";
 
 interface PostFormDialogProps {
   trigger: React.ReactNode;
@@ -23,17 +30,18 @@ export function PostFormDialog({
   const { mutateAsync: publish } = useNostrPublish();
   const { user } = useCurrentUser();
   const { toast } = useToast();
+  const queryClient = useQueryClient();
   const [open, setOpen] = useState(false);
-  const [titleInput, setTitleInput] = useState('');
-  const [dateInput, setDateInput] = useState('');
-  const [description, setDescription] = useState('');
+  const [titleInput, setTitleInput] = useState("");
+  const [dateInput, setDateInput] = useState("");
+  const [description, setDescription] = useState("");
 
   const handlePublish = async () => {
     if (!user) {
       toast({
-        title: 'Login required',
-        description: 'Please log in first.',
-        variant: 'destructive',
+        title: "Login required",
+        description: "Please log in first.",
+        variant: "destructive",
       });
       return;
     }
@@ -47,9 +55,9 @@ export function PostFormDialog({
       ? `Title: ${titleInput}\nDate: ${dateInput}\nDescription: ${text}`
       : text;
     await publish({ kind: 1, content: `${prefix} ${body} #CommunityNet` });
-    setTitleInput('');
-    setDateInput('');
-    setDescription('');
+    setTitleInput("");
+    setDateInput("");
+    setDescription("");
     setOpen(false);
   };
 
