@@ -3,6 +3,7 @@ import { useSeoMeta } from "@unhead/react";
 import { LoginArea } from "@/components/auth/LoginArea";
 import { useNostrPublish } from "@/hooks/useNostrPublish";
 import { useCurrentUser } from "@/hooks/useCurrentUser";
+import MainFeed from "@/components/MainFeed";
 
 export default function Index() {
   useSeoMeta({
@@ -256,8 +257,13 @@ export default function Index() {
               </div>
             ))}
           </div>
+          </div>
+        </div>
+
+        {/* — Main Feed — */}
+        <div className="mt-8">
+          <MainFeed />
         </div>
       </div>
-    </div>
-  );
+    );
 }
