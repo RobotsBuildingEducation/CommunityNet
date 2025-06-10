@@ -68,7 +68,7 @@ export default function Index() {
           s-center gap-4"
           >
             <div className="text-sm text-gray-600 dark:text-gray-400">
-              Oakland, CA • Neighborhood: Fruitvale
+              Oakland, CA • Neighborhood: Fruitvale, x
             </div>
             <LoginArea className="w-full max-w-sm" />
           </div>
