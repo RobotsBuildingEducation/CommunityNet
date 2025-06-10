@@ -1,8 +1,12 @@
 // src/pages/Index.tsx
 import { useSeoMeta } from "@unhead/react";
 import { LoginArea } from "@/components/auth/LoginArea";
-import { useNostrPublish } from "@/hooks/useNostrPublish";
-import { useCurrentUser } from "@/hooks/useCurrentUser";
+import MainFeed from "@/components/MainFeed";
+import { PostFormDialog } from "@/components/PostFormDialog";
+import { FeedDialog } from "@/components/FeedDialog";
+import { Dialog, DialogContent, DialogTrigger } from "@/components/ui/dialog";
+import { NoteContent } from "@/components/NoteContent";
+import { useCommunityNetFeed } from "@/hooks/useCommunityNetFeed";
 
 export default function Index() {
   useSeoMeta({
@@ -11,42 +15,12 @@ export default function Index() {
       "A modern Nostr client application built with React, TailwindCSS, and Nostrify.",
   });
 
-  const { mutateAsync: publish } = useNostrPublish();
-  const { user } = useCurrentUser();
+  const { data: events = [] } = useCommunityNetFeed();
 
-  const createEvent = async (content: string) => {
-    if (!user) {
-      alert("Please log in first.");
-      return;
-    }
-    try {
-      await publish({ kind: 1, content });
-      alert("Event published to Nostr!");
-    } catch (error) {
-      console.error(error);
-      alert("Failed to publish event");
-    }
-  };
-
-  const addResource = () => {
-    const msg = prompt("Describe the resource or skill you want to offer:");
-    if (msg) createEvent(`[resource] ${msg}`);
-  };
-
-  const requestHelp = () => {
-    const msg = prompt("Describe the help you need:");
-    if (msg) createEvent(`[help] ${msg}`);
-  };
-
-  const startAction = () => {
-    const msg = prompt("Describe the organizing action:");
-    if (msg) createEvent(`[action] ${msg}`);
-  };
-
-  const shareKnowledge = () => {
-    const msg = prompt("Share your knowledge:");
-    if (msg) createEvent(`[knowledge] ${msg}`);
-  };
+  const resources = events.filter((e) => e.content.includes('[resource]'));
+  const help = events.filter((e) => e.content.includes('[help]'));
+  const actions = events.filter((e) => e.content.includes('[action]'));
+  const knowledge = events.filter((e) => e.content.includes('[knowledge]'));
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-blue-600 to-purple-700 text-gray-900 dark:text-gray-100">
@@ -63,13 +37,18 @@ export default function Index() {
               <span>Connected to 47 local nodes</span>
             </div>
           </div>
-          <div
-            className="flex item
-          s-center gap-4"
-          >
+          <div className="flex items-center gap-4">
             <div className="text-sm text-gray-600 dark:text-gray-400">
-              Oakland, CA • Neighborhood: Fruitvale, x
+              Oakland, CA • Neighborhood: Fruitvale
             </div>
+            <Dialog>
+              <DialogTrigger asChild>
+                <button className="px-4 py-2 rounded-md bg-blue-600 text-white">Show Feed</button>
+              </DialogTrigger>
+              <DialogContent className="max-w-xl">
+                <MainFeed />
+              </DialogContent>
+            </Dialog>
             <LoginArea className="w-full max-w-sm" />
           </div>
         </div>
@@ -81,32 +60,24 @@ export default function Index() {
             <h3 className="text-xl font-semibold mb-4">
               🚨 Urgent Community Needs
             </h3>
-            <div className="space-y-3" onClick={startAction}>
-              <div className="bg-gray-100 dark:bg-gray-700 rounded-lg p-4 cursor-pointer">
-                <div className="font-medium">
-                  Eviction Defense - Tomorrow 9AM
+            <div className="space-y-3">
+              {help.map((ev) => (
+                <div key={ev.id} className="bg-gray-100 dark:bg-gray-700 rounded-lg p-4">
+                  <NoteContent event={ev} />
                 </div>
-                <div className="flex justify-between text-sm text-gray-600 dark:text-gray-400 mt-1">
-                  <span>0.3 miles away</span>
-                  <span>12 people responding</span>
-                </div>
-              </div>
-              <div className="bg-gray-100 dark:bg-gray-700 rounded-lg p-4 cursor-pointer">
-                <div className="font-medium">
-                  Food Distribution - This Weekend
-                </div>
-                <div className="flex justify-between text-sm text-gray-600 dark:text-gray-400 mt-1">
-                  <span>Community Center</span>
-                  <span>Need 6 more volunteers</span>
-                </div>
-              </div>
-              <div className="bg-gray-100 dark:bg-gray-700 rounded-lg p-4 cursor-pointer">
-                <div className="font-medium">Legal Observer Training</div>
-                <div className="flex justify-between text-sm text-gray-600 dark:text-gray-400 mt-1">
-                  <span>Tuesday 7PM</span>
-                  <span>Virtual + In-person</span>
-                </div>
-              </div>
+              ))}
+            </div>
+            <div className="flex gap-2 mt-4">
+              <PostFormDialog
+                prefix="[help]"
+                title="Request Help"
+                trigger={<button className="px-4 py-2 rounded-md bg-blue-600 text-white">Request Help</button>}
+              />
+              <FeedDialog
+                events={help}
+                title="Help Requests"
+                trigger={<button className="px-4 py-2 rounded-md bg-white/80 text-gray-800 border border-gray-300">Show Feed</button>}
+              />
             </div>
           </div>
 
@@ -115,32 +86,24 @@ export default function Index() {
             <h3 className="text-xl font-semibold mb-4">
               🤝 Available Resources
             </h3>
-            <div className="space-y-3" onClick={addResource}>
-              <div className="bg-gray-100 dark:bg-gray-700 rounded-lg p-4 cursor-pointer">
-                <div className="font-medium">Maria: Bilingual legal aid</div>
-                <div className="flex justify-between text-sm text-gray-600 dark:text-gray-400 mt-1">
-                  <span>Immigration law</span>
-                  <span>Available weekends</span>
+            <div className="space-y-3">
+              {resources.map((ev) => (
+                <div key={ev.id} className="bg-gray-100 dark:bg-gray-700 rounded-lg p-4">
+                  <NoteContent event={ev} />
                 </div>
-              </div>
-              <div className="bg-gray-100 dark:bg-gray-700 rounded-lg p-4 cursor-pointer">
-                <div className="font-medium">
-                  Tech Collective: Digital security
-                </div>
-                <div className="flex justify-between text-sm text-gray-600 dark:text-gray-400 mt-1">
-                  <span>Phone/computer security</span>
-                  <span>Sliding scale</span>
-                </div>
-              </div>
-              <div className="bg-gray-100 dark:bg-gray-700 rounded-lg p-4 cursor-pointer">
-                <div className="font-medium">
-                  Community Garden: Fresh produce
-                </div>
-                <div className="flex justify-between text-sm text-gray-600 dark:text-gray-400 mt-1">
-                  <span>Tuesday/Saturday pickup</span>
-                  <span>No questions asked</span>
-                </div>
-              </div>
+              ))}
+            </div>
+            <div className="flex gap-2 mt-4">
+              <PostFormDialog
+                prefix="[resource]"
+                title="Add Resource"
+                trigger={<button className="px-4 py-2 rounded-md bg-blue-600 text-white">Add Resource</button>}
+              />
+              <FeedDialog
+                events={resources}
+                title="Resources"
+                trigger={<button className="px-4 py-2 rounded-md bg-white/80 text-gray-800 border border-gray-300">Show Feed</button>}
+              />
             </div>
           </div>
 
@@ -149,28 +112,48 @@ export default function Index() {
             <h3 className="text-xl font-semibold mb-4">
               ⚡ Organizing Actions
             </h3>
-            <div className="space-y-3" onClick={startAction}>
-              <div className="bg-gray-100 dark:bg-gray-700 rounded-lg p-4 cursor-pointer">
-                <div className="font-medium">Rent Strike Planning</div>
-                <div className="flex justify-between text-sm text-gray-600 dark:text-gray-400 mt-1">
-                  <span>Building at 14th & Market</span>
-                  <span>23 tenants coordinating</span>
+            <div className="space-y-3">
+              {actions.map((ev) => (
+                <div key={ev.id} className="bg-gray-100 dark:bg-gray-700 rounded-lg p-4">
+                  <NoteContent event={ev} />
                 </div>
-              </div>
-              <div className="bg-gray-100 dark:bg-gray-700 rounded-lg p-4 cursor-pointer">
-                <div className="font-medium">Community Land Trust Meeting</div>
-                <div className="flex justify-between text-sm text-gray-600 dark:text-gray-400 mt-1">
-                  <span>Thursday 6:30PM</span>
-                  <span>Liberation Café</span>
+              ))}
+            </div>
+            <div className="flex gap-2 mt-4">
+              <PostFormDialog
+                prefix="[action]"
+                title="Start Action"
+                trigger={<button className="px-4 py-2 rounded-md bg-blue-600 text-white">Start Action</button>}
+              />
+              <FeedDialog
+                events={actions}
+                title="Actions"
+                trigger={<button className="px-4 py-2 rounded-md bg-white/80 text-gray-800 border border-gray-300">Show Feed</button>}
+              />
+            </div>
+          </div>
+
+          {/* Shared Knowledge */}
+          <div className="bg-white/90 dark:bg-gray-800/75 backdrop-blur-md rounded-2xl p-6 shadow-lg border-l-4 border-purple-500 hover:-translate-y-1 transform transition">
+            <h3 className="text-xl font-semibold mb-4">📚 Shared Knowledge</h3>
+            <div className="space-y-3">
+              {knowledge.map((ev) => (
+                <div key={ev.id} className="bg-gray-100 dark:bg-gray-700 rounded-lg p-4">
+                  <NoteContent event={ev} />
                 </div>
-              </div>
-              <div className="bg-gray-100 dark:bg-gray-700 rounded-lg p-4 cursor-pointer">
-                <div className="font-medium">Cop Watch Training</div>
-                <div className="flex justify-between text-sm text-gray-600 dark:text-gray-400 mt-1">
-                  <span>Know your rights</span>
-                  <span>Safe documentation</span>
-                </div>
-              </div>
+              ))}
+            </div>
+            <div className="flex gap-2 mt-4">
+              <PostFormDialog
+                prefix="[knowledge]"
+                title="Share Knowledge"
+                trigger={<button className="px-4 py-2 rounded-md bg-blue-600 text-white">Share Knowledge</button>}
+              />
+              <FeedDialog
+                events={knowledge}
+                title="Knowledge"
+                trigger={<button className="px-4 py-2 rounded-md bg-white/80 text-gray-800 border border-gray-300">Show Feed</button>}
+              />
             </div>
           </div>
         </div>
@@ -194,41 +177,42 @@ export default function Index() {
                 { top: "30%", left: "45%", color: "bg-green-500" },
                 { top: "60%", left: "70%", color: "bg-blue-500" },
               ].map((pt, i) => (
-                <div
+                <PostFormDialog
                   key={i}
-                  className={`absolute w-3 h-3 rounded-full ${pt.color} cursor-pointer`}
-                  style={{ top: pt.top, left: pt.left }}
-                  onClick={startAction}
+                  prefix="[action]"
+                  title="Start Action"
+                  trigger={
+                    <div
+                      className={`absolute w-3 h-3 rounded-full ${pt.color} cursor-pointer`}
+                      style={{ top: pt.top, left: pt.left }}
+                    />
+                  }
                 />
               ))}
             </div>
           </div>
 
           <div className="flex flex-wrap gap-4">
-            <button
-              className="px-4 py-2 rounded-md font-semibold bg-blue-600 text-white hover:bg-blue-700 transition"
-              onClick={addResource}
-            >
-              Add Resource/Skill
-            </button>
-            <button
-              className="px-4 py-2 rounded-md font-semibold bg-blue-600 text-white hover:bg-blue-700 transition"
-              onClick={requestHelp}
-            >
-              Request Help
-            </button>
-            <button
-              className="px-4 py-2 rounded-md font-semibold bg-white/80 text-gray-800 border border-gray-300 hover:bg-white transition"
-              onClick={startAction}
-            >
-              Start Organizing Action
-            </button>
-            <button
-              className="px-4 py-2 rounded-md font-semibold bg-white/80 text-gray-800 border border-gray-300 hover:bg-white transition"
-              onClick={shareKnowledge}
-            >
-              Share Knowledge
-            </button>
+            <PostFormDialog
+              prefix="[resource]"
+              title="Add Resource"
+              trigger={<button className="px-4 py-2 rounded-md font-semibold bg-blue-600 text-white hover:bg-blue-700 transition">Add Resource/Skill</button>}
+            />
+            <PostFormDialog
+              prefix="[help]"
+              title="Request Help"
+              trigger={<button className="px-4 py-2 rounded-md font-semibold bg-blue-600 text-white hover:bg-blue-700 transition">Request Help</button>}
+            />
+            <PostFormDialog
+              prefix="[action]"
+              title="Start Action"
+              trigger={<button className="px-4 py-2 rounded-md font-semibold bg-white/80 text-gray-800 border border-gray-300 hover:bg-white transition">Start Organizing Action</button>}
+            />
+            <PostFormDialog
+              prefix="[knowledge]"
+              title="Share Knowledge"
+              trigger={<button className="px-4 py-2 rounded-md font-semibold bg-white/80 text-gray-800 border border-gray-300 hover:bg-white transition">Share Knowledge</button>}
+            />
           </div>
         </div>
 
@@ -256,8 +240,9 @@ export default function Index() {
               </div>
             ))}
           </div>
+          </div>
         </div>
+
       </div>
-    </div>
-  );
+    );
 }
