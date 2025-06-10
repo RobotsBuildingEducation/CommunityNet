@@ -66,7 +66,7 @@ export function PostFormDialog({
     });
     queryClient.invalidateQueries({ queryKey: ['communitynet-feed'] });
     setTitleInput('');
-    setDateInput('');
+    setDateInput(undefined);
     setDescription('');
     setOpen(false);
   };

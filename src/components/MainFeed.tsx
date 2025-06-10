@@ -30,7 +30,11 @@ export function MainFeed() {
     const finalContent = text.endsWith("#CommunityNet")
       ? text
       : `${text} #CommunityNet`;
-    await publish({ kind: 1, content: finalContent });
+    await publish({
+      kind: 1,
+      content: finalContent,
+      tags: [['t', 'communitynet']],
+    });
     setContent("");
     queryClient.invalidateQueries({ queryKey: ["communitynet-feed"] });
   };

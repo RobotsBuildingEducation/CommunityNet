@@ -5,9 +5,9 @@ import type { NostrEvent } from '@nostrify/nostrify';
 /**
  * Fetch community notes from Nostr and keep them refreshed.
  *
- * Events are tagged with `t` tags so we can query by category at the relay
- * level. We include tags for `communitynet` and the category label such as
- * `help`, `resource`, `action`, or `knowledge`.
+ * Events are tagged with `t` tags. We fetch notes that include the
+ * `communitynet` tag and then filter them by category tags such as `help`,
+ * `resource`, `action`, or `knowledge` on the client.
 */
 export function useCommunityNetFeed() {
   const { nostr } = useNostr();
@@ -19,7 +19,7 @@ export function useCommunityNetFeed() {
         [
           {
             kinds: [1],
-            '#t': ['communitynet', 'help', 'resource', 'action', 'knowledge'],
+            '#t': ['communitynet'],
             limit: 100,
           },
         ],

@@ -7,6 +7,7 @@ import { FeedDialog } from "@/components/FeedDialog";
 import { Dialog, DialogContent, DialogTrigger } from "@/components/ui/dialog";
 import { NoteContent } from "@/components/NoteContent";
 import { useCommunityNetFeed } from "@/hooks/useCommunityNetFeed";
+import { hasTag } from "@/lib/utils";
 
 export default function Index() {
   useSeoMeta({
@@ -17,10 +18,18 @@ export default function Index() {
 
   const { data: events = [] } = useCommunityNetFeed();
 
-  const resources = events.filter((e) => e.content.includes("[resource]"));
-  const help = events.filter((e) => e.content.includes("[help]"));
-  const actions = events.filter((e) => e.content.includes("[action]"));
-  const knowledge = events.filter((e) => e.content.includes("[knowledge]"));
+  const resources = events.filter(
+    (e) => hasTag(e, "resource") || e.content.includes("[resource]")
+  );
+  const help = events.filter(
+    (e) => hasTag(e, "help") || e.content.includes("[help]")
+  );
+  const actions = events.filter(
+    (e) => hasTag(e, "action") || e.content.includes("[action]")
+  );
+  const knowledge = events.filter(
+    (e) => hasTag(e, "knowledge") || e.content.includes("[knowledge]")
+  );
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-blue-600 to-purple-700 text-gray-900 dark:text-gray-100">
