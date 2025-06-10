@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import { Dialog, DialogContent, DialogFooter, DialogHeader, DialogTitle, DialogTrigger } from '@/components/ui/dialog';
 import { Textarea } from '@/components/ui/textarea';
+import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
 import { useNostrPublish } from '@/hooks/useNostrPublish';
 import { useCurrentUser } from '@/hooks/useCurrentUser';
@@ -10,14 +11,22 @@ interface PostFormDialogProps {
   trigger: React.ReactNode;
   prefix: string;
   title: string;
+  withDetails?: boolean;
 }
 
-export function PostFormDialog({ trigger, prefix, title }: PostFormDialogProps) {
+export function PostFormDialog({
+  trigger,
+  prefix,
+  title,
+  withDetails,
+}: PostFormDialogProps) {
   const { mutateAsync: publish } = useNostrPublish();
   const { user } = useCurrentUser();
   const { toast } = useToast();
   const [open, setOpen] = useState(false);
-  const [content, setContent] = useState('');
+  const [titleInput, setTitleInput] = useState('');
+  const [dateInput, setDateInput] = useState('');
+  const [description, setDescription] = useState('');
 
   const handlePublish = async () => {
     if (!user) {
@@ -28,10 +37,19 @@ export function PostFormDialog({ trigger, prefix, title }: PostFormDialogProps) 
       });
       return;
     }
-    const text = content.trim();
-    if (!text) return;
-    await publish({ kind: 1, content: `${prefix} ${text} #CommunityNet` });
-    setContent('');
+    const text = description.trim();
+    if (withDetails) {
+      if (!titleInput.trim() && !text) return;
+    } else {
+      if (!text) return;
+    }
+    const body = withDetails
+      ? `Title: ${titleInput}\nDate: ${dateInput}\nDescription: ${text}`
+      : text;
+    await publish({ kind: 1, content: `${prefix} ${body} #CommunityNet` });
+    setTitleInput('');
+    setDateInput('');
+    setDescription('');
     setOpen(false);
   };
 
@@ -42,10 +60,26 @@ export function PostFormDialog({ trigger, prefix, title }: PostFormDialogProps) 
         <DialogHeader>
           <DialogTitle>{title}</DialogTitle>
         </DialogHeader>
+        {withDetails && (
+          <div className="space-y-2 mb-4">
+            <Input
+              value={titleInput}
+              onChange={(e) => setTitleInput(e.target.value)}
+              placeholder="Title"
+              className=""
+            />
+            <Input
+              value={dateInput}
+              onChange={(e) => setDateInput(e.target.value)}
+              placeholder="Date"
+              className=""
+            />
+          </div>
+        )}
         <Textarea
-          value={content}
-          onChange={(e) => setContent(e.target.value)}
-          placeholder="Write your note..."
+          value={description}
+          onChange={(e) => setDescription(e.target.value)}
+          placeholder={withDetails ? "Description" : "Write your note..."}
           className="mb-4"
         />
         <DialogFooter>
