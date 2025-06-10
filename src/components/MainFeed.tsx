@@ -33,7 +33,7 @@ export function MainFeed() {
     await publish({
       kind: 1,
       content: finalContent,
-      tags: [['t', 'communitynet']],
+      tags: [["t", "CommunityNet"]],
     });
     setContent("");
     queryClient.invalidateQueries({ queryKey: ["communitynet-feed"] });
