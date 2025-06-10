@@ -1,5 +1,8 @@
 // src/pages/Index.tsx
 import { useSeoMeta } from "@unhead/react";
+import { LoginArea } from "@/components/auth/LoginArea";
+import { useNostrPublish } from "@/hooks/useNostrPublish";
+import { useCurrentUser } from "@/hooks/useCurrentUser";
 
 export default function Index() {
   useSeoMeta({
@@ -8,9 +11,42 @@ export default function Index() {
       "A modern Nostr client application built with React, TailwindCSS, and Nostrify.",
   });
 
-  // helper alert
-  const notify = (msg: string) => () =>
-    alert(`In the real platform, this would:\n\n${msg}`);
+  const { mutateAsync: publish } = useNostrPublish();
+  const { user } = useCurrentUser();
+
+  const createEvent = async (content: string) => {
+    if (!user) {
+      alert("Please log in first.");
+      return;
+    }
+    try {
+      await publish({ kind: 1, content });
+      alert("Event published to Nostr!");
+    } catch (error) {
+      console.error(error);
+      alert("Failed to publish event");
+    }
+  };
+
+  const addResource = () => {
+    const msg = prompt("Describe the resource or skill you want to offer:");
+    if (msg) createEvent(`[resource] ${msg}`);
+  };
+
+  const requestHelp = () => {
+    const msg = prompt("Describe the help you need:");
+    if (msg) createEvent(`[help] ${msg}`);
+  };
+
+  const startAction = () => {
+    const msg = prompt("Describe the organizing action:");
+    if (msg) createEvent(`[action] ${msg}`);
+  };
+
+  const shareKnowledge = () => {
+    const msg = prompt("Share your knowledge:");
+    if (msg) createEvent(`[knowledge] ${msg}`);
+  };
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-blue-600 to-purple-700 text-gray-900 dark:text-gray-100">
@@ -27,8 +63,14 @@ export default function Index() {
               <span>Connected to 47 local nodes</span>
             </div>
           </div>
-          <div className="text-sm text-gray-600 dark:text-gray-400">
-            Oakland, CA • Neighborhood: Fruitvale
+          <div
+            className="flex item
+          s-center gap-4"
+          >
+            <div className="text-sm text-gray-600 dark:text-gray-400">
+              Oakland, CA • Neighborhood: Fruitvale
+            </div>
+            <LoginArea className="w-full max-w-sm" />
           </div>
         </div>
 
@@ -39,10 +81,7 @@ export default function Index() {
             <h3 className="text-xl font-semibold mb-4">
               🚨 Urgent Community Needs
             </h3>
-            <div
-              className="space-y-3"
-              onClick={notify("open detailed information & connection options")}
-            >
+            <div className="space-y-3" onClick={startAction}>
               <div className="bg-gray-100 dark:bg-gray-700 rounded-lg p-4 cursor-pointer">
                 <div className="font-medium">
                   Eviction Defense - Tomorrow 9AM
@@ -76,10 +115,7 @@ export default function Index() {
             <h3 className="text-xl font-semibold mb-4">
               🤝 Available Resources
             </h3>
-            <div
-              className="space-y-3"
-              onClick={notify("open detailed information & connection options")}
-            >
+            <div className="space-y-3" onClick={addResource}>
               <div className="bg-gray-100 dark:bg-gray-700 rounded-lg p-4 cursor-pointer">
                 <div className="font-medium">Maria: Bilingual legal aid</div>
                 <div className="flex justify-between text-sm text-gray-600 dark:text-gray-400 mt-1">
@@ -113,10 +149,7 @@ export default function Index() {
             <h3 className="text-xl font-semibold mb-4">
               ⚡ Organizing Actions
             </h3>
-            <div
-              className="space-y-3"
-              onClick={notify("open detailed information & connection options")}
-            >
+            <div className="space-y-3" onClick={startAction}>
               <div className="bg-gray-100 dark:bg-gray-700 rounded-lg p-4 cursor-pointer">
                 <div className="font-medium">Rent Strike Planning</div>
                 <div className="flex justify-between text-sm text-gray-600 dark:text-gray-400 mt-1">
@@ -165,9 +198,7 @@ export default function Index() {
                   key={i}
                   className={`absolute w-3 h-3 rounded-full ${pt.color} cursor-pointer`}
                   style={{ top: pt.top, left: pt.left }}
-                  onClick={notify(
-                    "show activity details & ways to get involved"
-                  )}
+                  onClick={startAction}
                 />
               ))}
             </div>
@@ -176,25 +207,25 @@ export default function Index() {
           <div className="flex flex-wrap gap-4">
             <button
               className="px-4 py-2 rounded-md font-semibold bg-blue-600 text-white hover:bg-blue-700 transition"
-              onClick={notify("open Add Resource/Skill tool")}
+              onClick={addResource}
             >
               Add Resource/Skill
             </button>
             <button
               className="px-4 py-2 rounded-md font-semibold bg-blue-600 text-white hover:bg-blue-700 transition"
-              onClick={notify("open Request Help tool")}
+              onClick={requestHelp}
             >
               Request Help
             </button>
             <button
               className="px-4 py-2 rounded-md font-semibold bg-white/80 text-gray-800 border border-gray-300 hover:bg-white transition"
-              onClick={notify("open Start Organizing Action tool")}
+              onClick={startAction}
             >
               Start Organizing Action
             </button>
             <button
               className="px-4 py-2 rounded-md font-semibold bg-white/80 text-gray-800 border border-gray-300 hover:bg-white transition"
-              onClick={notify("open Share Knowledge tool")}
+              onClick={shareKnowledge}
             >
               Share Knowledge
             </button>
