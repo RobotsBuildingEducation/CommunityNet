@@ -4,5 +4,5 @@
   "start_url": "/",
   "display": "standalone",
   "background_color": "#ffffff",
-  "description": "A modern Nostr client application"
+  "description": "Collect, trade, and zap digital pets across the Nostr network"
 }
