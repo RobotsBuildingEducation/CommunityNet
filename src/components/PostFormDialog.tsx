@@ -53,7 +53,7 @@ export function PostFormDialog({
     const body = withDetails
       ? `Title: ${titleInput}\nDate: ${dateInput}\nDescription: ${text}`
       : text;
-    await publish({ kind: 1, content: `${prefix} ${body} #CommunityNet` });
+    await publish({ kind: 1, content: `${prefix} ${body} #NeoPets` });
     setTitleInput("");
     setDateInput("");
     setDescription("");

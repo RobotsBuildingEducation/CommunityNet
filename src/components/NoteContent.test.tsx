@@ -141,7 +141,7 @@ describe('NoteContent', () => {
       created_at: Math.floor(Date.now() / 1000),
       kind: 1,
       tags: [],
-      content: '[help] Title: Need water\nDate: Today\nDescription: Bring bottles #CommunityNet',
+      content: '[help] Title: Need water\nDate: Today\nDescription: Bring bottles #NeoPets',
       sig: 'sig',
     };
 
@@ -152,7 +152,7 @@ describe('NoteContent', () => {
     );
 
     expect(screen.queryByText('[help]')).not.toBeInTheDocument();
-    expect(screen.queryByText('#CommunityNet')).not.toBeInTheDocument();
+    expect(screen.queryByText('#NeoPets')).not.toBeInTheDocument();
     expect(screen.getByText('Need water')).toBeInTheDocument();
     expect(screen.getByText('Today')).toBeInTheDocument();
     expect(screen.getByText('Bring bottles')).toBeInTheDocument();

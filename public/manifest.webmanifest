@@ -1,6 +1,6 @@
 {
-  "name": "CommunityNet",
-  "short_name": "CommunityNet",
+  "name": "NeoPets Collector",
+  "short_name": "NeoPets",
   "start_url": "/",
   "display": "standalone",
   "background_color": "#ffffff",

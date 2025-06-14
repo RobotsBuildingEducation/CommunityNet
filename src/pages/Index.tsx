@@ -6,16 +6,15 @@ import { PostFormDialog } from "@/components/PostFormDialog";
 import { FeedDialog } from "@/components/FeedDialog";
 import { Dialog, DialogContent, DialogTrigger } from "@/components/ui/dialog";
 import { NoteContent } from "@/components/NoteContent";
-import { useCommunityNetFeed } from "@/hooks/useCommunityNetFeed";
+import { useNeopetsFeed } from "@/hooks/useNeopetsFeed";
 
 export default function Index() {
   useSeoMeta({
-    title: "CommunityNet – Decentralized Organizing Platform",
-    description:
-      "A modern Nostr client application built with React, TailwindCSS, and Nostrify.",
+    title: "NeoPets Collector",
+    description: "Collect and trade digital pets across the Nostr network.",
   });
 
-  const { data: events = [] } = useCommunityNetFeed();
+  const { data: events = [] } = useNeopetsFeed();
 
   const resources = events.filter((e) => e.content.includes("[resource]"));
   const help = events.filter((e) => e.content.includes("[help]"));
@@ -28,9 +27,9 @@ export default function Index() {
         {/* — Header — */}
         <div className="bg-white/90 dark:bg-gray-900/75 backdrop-blur-md rounded-2xl p-6 mb-8 shadow-lg flex flex-col md:flex-row justify-between items-center gap-4">
           <div className="space-y-2">
-            <h1 className="text-3xl font-bold">CommunityNet</h1>
+            <h1 className="text-3xl font-bold">NeoPets Collector</h1>
             <p className="text-lg text-gray-700 dark:text-gray-300">
-              Decentralized organizing platform for community power
+              Collect and trade digital pets across Nostr
             </p>
             <div className="flex items-center space-x-2 text-sm text-gray-600 dark:text-gray-400">
               <span className="w-2 h-2 rounded-full bg-green-400 animate-pulse inline-block" />
