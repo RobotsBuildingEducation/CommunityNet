@@ -7,32 +7,24 @@ import {
   DialogTitle,
   DialogTrigger,
 } from "@/components/ui/dialog";
-import { Textarea } from "@/components/ui/textarea";
 import { Input } from "@/components/ui/input";
+import { Textarea } from "@/components/ui/textarea";
 import { Button } from "@/components/ui/button";
 import { useNostrPublish } from "@/hooks/useNostrPublish";
 import { useCurrentUser } from "@/hooks/useCurrentUser";
 import { useToast } from "@/hooks/useToast";
 
-interface PostFormDialogProps {
+interface PetFormDialogProps {
   trigger: React.ReactNode;
-  prefix: string;
-  title: string;
-  withDetails?: boolean;
 }
 
-export function PostFormDialog({
-  trigger,
-  prefix,
-  title,
-  withDetails,
-}: PostFormDialogProps) {
+export function PetFormDialog({ trigger }: PetFormDialogProps) {
   const { mutateAsync: publish } = useNostrPublish();
   const { user } = useCurrentUser();
   const { toast } = useToast();
   const [open, setOpen] = useState(false);
-  const [titleInput, setTitleInput] = useState("");
-  const [dateInput, setDateInput] = useState("");
+  const [name, setName] = useState("");
+  const [image, setImage] = useState("");
   const [description, setDescription] = useState("");
 
   const handlePublish = async () => {
@@ -44,18 +36,11 @@ export function PostFormDialog({
       });
       return;
     }
-    const text = description.trim();
-    if (withDetails) {
-      if (!titleInput.trim() && !text) return;
-    } else {
-      if (!text) return;
-    }
-    const body = withDetails
-      ? `Title: ${titleInput}\nDate: ${dateInput}\nDescription: ${text}`
-      : text;
-    await publish({ kind: 1, content: `${prefix} ${body} #NeoPets` });
-    setTitleInput("");
-    setDateInput("");
+    if (!name.trim()) return;
+    const body = `Name: ${name}\nImage: ${image}\nDescription: ${description}`;
+    await publish({ kind: 1, content: `${body} #NeoPets` });
+    setName("");
+    setImage("");
     setDescription("");
     setOpen(false);
   };
@@ -65,28 +50,24 @@ export function PostFormDialog({
       <DialogTrigger asChild>{trigger}</DialogTrigger>
       <DialogContent>
         <DialogHeader>
-          <DialogTitle>{title}</DialogTitle>
+          <DialogTitle>Mint New Pet</DialogTitle>
         </DialogHeader>
-        {withDetails && (
-          <div className="space-y-2 mb-4">
-            <Input
-              value={titleInput}
-              onChange={(e) => setTitleInput(e.target.value)}
-              placeholder="Title"
-              className=""
-            />
-            <Input
-              value={dateInput}
-              onChange={(e) => setDateInput(e.target.value)}
-              placeholder="Date"
-              className=""
-            />
-          </div>
-        )}
+        <Input
+          value={name}
+          onChange={(e) => setName(e.target.value)}
+          placeholder="Pet name"
+          className="mb-2"
+        />
+        <Input
+          value={image}
+          onChange={(e) => setImage(e.target.value)}
+          placeholder="Image URL"
+          className="mb-2"
+        />
         <Textarea
           value={description}
           onChange={(e) => setDescription(e.target.value)}
-          placeholder={withDetails ? "Description" : "Write your note..."}
+          placeholder="Description"
           className="mb-4"
         />
         <DialogFooter>
@@ -96,3 +77,5 @@ export function PostFormDialog({
     </Dialog>
   );
 }
+
+export default PetFormDialog;

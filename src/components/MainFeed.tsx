@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { useQueryClient } from "@tanstack/react-query";
 import { useNostrPublish } from "@/hooks/useNostrPublish";
-import { useCommunityNetFeed } from "@/hooks/useCommunityNetFeed";
+import { useNeopetsFeed } from "@/hooks/useNeopetsFeed";
 import { useSendNutzap, useUserWallet } from "../../hooks/useCashu";
 import { useCurrentUser } from "@/hooks/useCurrentUser";
 import { NoteContent } from "@/components/NoteContent";
@@ -18,7 +18,7 @@ export function MainFeed() {
   const queryClient = useQueryClient();
   const [content, setContent] = useState("");
 
-  const { data: events = [], isLoading } = useCommunityNetFeed();
+  const { data: events = [], isLoading } = useNeopetsFeed();
 
   const handlePublish = async () => {
     if (!user) {
@@ -27,12 +27,12 @@ export function MainFeed() {
     }
     const text = content.trim();
     if (!text) return;
-    const finalContent = text.endsWith("#CommunityNet")
+    const finalContent = text.endsWith("#NeoPets")
       ? text
-      : `${text} #CommunityNet`;
+      : `${text} #NeoPets`;
     await publish({ kind: 1, content: finalContent });
     setContent("");
-    queryClient.invalidateQueries({ queryKey: ["communitynet-feed"] });
+    queryClient.invalidateQueries({ queryKey: ["neopets-feed"] });
   };
 
   const handleZap = async (event: NostrEvent) => {

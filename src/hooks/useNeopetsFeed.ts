@@ -2,17 +2,17 @@ import { useNostr } from "@nostrify/react";
 import { useQuery } from "@tanstack/react-query";
 import type { NostrEvent } from "@nostrify/nostrify";
 
-export function useCommunityNetFeed() {
+export function useNeopetsFeed() {
   const { nostr } = useNostr();
 
   return useQuery<NostrEvent[]>({
-    queryKey: ["communitynet-feed"],
+    queryKey: ["neopets-feed"],
     queryFn: async ({ signal }) => {
       const events = await nostr.query([{ kinds: [1], limit: 100 }], {
         signal: AbortSignal.any([signal, AbortSignal.timeout(5000)]),
       });
       return events
-        .filter((e) => e.content.includes("#CommunityNet"))
+        .filter((e) => e.content.includes("#NeoPets"))
         .sort((a, b) => b.created_at - a.created_at);
     },
     refetchInterval: 1000,

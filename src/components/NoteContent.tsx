@@ -16,7 +16,7 @@ export function NoteContent({ event, className }: NoteContentProps) {
   // Preprocess the event content to strip internal markers and extract metadata
   const { title, date, text } = useMemo(() => {
     const content = event.content
-      .replace(/#CommunityNet/g, "")
+      .replace(/#NeoPets/g, "")
       .replace(/\[(knowledge|help|resource|action)\]\s*/gi, "")
       .trim();
 

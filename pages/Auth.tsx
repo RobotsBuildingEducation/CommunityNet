@@ -3,7 +3,7 @@ import { LoginArea } from "@/components/auth/LoginArea";
 
 export default function Auth() {
   useSeoMeta({
-    title: "Login - CommunityNet",
+    title: "Login - NeoPets Collector",
     description: "Log in with your nsec or create a new account.",
   });
 
